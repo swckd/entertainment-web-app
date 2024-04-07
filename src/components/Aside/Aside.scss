@@ -1,0 +1,29 @@
+@import "../../App.scss";
+
+.Aside {
+  background-color: $semi-dark-blue;
+  border-radius: 20px;
+
+  height: 100%;
+  // position: fixed;
+
+  ul {
+    list-style-type: none;
+
+    li {
+      a {
+        img {
+          &:hover,
+          &:active {
+            filter: brightness(0) invert(1);
+          }
+        }
+      }
+    }
+  }
+
+  .avatar-img {
+    width: 40px;
+    border: 1px solid $white;
+  }
+}

@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+#root {
+  margin-top: 32px;
+  margin-left: 32px;
+}
+
+body {
+  font-size: 15px;
+  letter-spacing: 0px;
+  font-weight: 300;
+  background-color: #10141e;
+  color: #ffffff;
+}
+
+aside {
+  background-color: #161d2f;
+  border-radius: 20px;
+  width: 96px;
+  height: 90vh;
+  position: fixed;
+}
+
+aside .avatar-img {
+  width: 40px;
+  border: 1px solid #ffffff;
+}/*# sourceMappingURL=App.css.map */

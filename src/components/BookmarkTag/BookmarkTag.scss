@@ -1,0 +1,11 @@
+@import "../../App.scss";
+
+.BookmarkTag {
+    background-color: rgba(16, 20, 30, 0.5);
+    color: $white;
+}
+
+.BookmarkTag:hover {
+    background-color: rgba(16, 20, 30, 1);
+    cursor: pointer;
+}
