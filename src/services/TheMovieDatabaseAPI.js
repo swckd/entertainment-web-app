@@ -41,7 +41,6 @@ const getTopRatedData = async () => {
   }
 }
 
-
 const getMoviesData = async () => {
   try {
     const response = await axiosInstance.get('/trending/movie/day',
@@ -69,17 +68,80 @@ const getSeriesData = async () => {
 const getSearchData = async (query) => {
   try {
     const response = await axiosInstance.get("/search/multi",
-    {params: {
-      query: query,
-      include_adult: 'false',
-      language: 'en-US',
-      page: '1',
-    }});
+      {
+        params: {
+          query: query,
+          include_adult: 'false',
+          language: 'en-US',
+          page: '1',
+        }
+      });
     return response.data;
   } catch (error) {
     console.error('Failed to fetch query', error);
   }
 }
+
+const createGuestSession = async () => {
+  try {
+    const response = await axiosInstance.get("/authentication/guest_session/new");
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create Guest Session', error);
+  }
+}
+
+const createRequestToken = async () => {
+  try {
+    const response = await axiosInstance.get("/authentication/token/new");
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create Request Token', error);
+  }
+}
+
+const createSession = async (username, password, requestToken) => {
+  try {
+    const response = await axiosInstance.post("/authentication/session/new",
+      {
+        username: `${username}`,
+        password: `${password}`,
+        request_token: `${requestToken}`
+      },
+      {
+        headers: {
+          'content-type': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create Request Session', error);
+  }
+}
+
+const deleteSession = async (session_id) => {
+  try {
+    const response = await axiosInstance.delete("https://api.themoviedb.org/3/authentication/session",
+
+      { data: { session_id: session_id } }
+
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to Delete Session', error);
+  }
+}
+
+const getAccountData = async (session_id) => {
+  try {
+    const response = await axiosInstance.get(`https://api.themoviedb.org/3/account?session_id=${session_id}`)
+    return response.data;
+  } catch (error) {
+    console.error('Failed to get Account Data', error);
+  }
+}
+
 
 
 export default {
@@ -88,5 +150,10 @@ export default {
   getTopRatedData,
   getMoviesData,
   getSeriesData,
-  getSearchData
+  getSearchData,
+  createGuestSession,
+  createRequestToken,
+  createSession,
+  deleteSession,
+  getAccountData
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 // API
-import TheMovieDatabaseAPI from '../../services/TheMovieDatabaseAPI ';
+import TheMovieDatabaseAPI from '../../services/TheMovieDatabaseAPI';
 // SCSS
 import './TopRatedContainer.scss';
 // Child Components

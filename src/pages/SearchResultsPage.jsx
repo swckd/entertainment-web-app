@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // API
-import TheMovieDatabaseAPI from '../services/TheMovieDatabaseAPI ';
+import TheMovieDatabaseAPI from '../services/TheMovieDatabaseAPI';
 
 // Child Components
 import Thumbnail from "../components/Thumbnail/Thumbnail";

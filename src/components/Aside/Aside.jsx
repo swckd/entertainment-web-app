@@ -1,20 +1,21 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+// CSS
 import "./Aside.scss";
-
+// Images
 import logo from "../../assets/logo.svg";
-import avatar from "../../assets/image-avatar.png";
 import iconnavhome from "../../assets/icon-nav-home.svg";
 import iconnavmovies from "../../assets/icon-nav-movies.svg";
 import iconnavtvseries from "../../assets/icon-nav-tv-series.svg";
 import iconnavbookmark from "../../assets/icon-nav-bookmark.svg";
+// Child Components
+import UserAuthenticationButton from "../UserAuthenticationButton/UserAuthenticationButton";
 
-
-import { Link } from 'react-router-dom';
 
 const Aside = () => (
   <div className="Aside d-flex flex-column text-center">
     <div className="mt-4 mb-4">
-      <img src={logo} className="" />
+      <img src={logo} alt="logo" />
     </div>
     <div>
       <ul className="p-0">
@@ -41,11 +42,7 @@ const Aside = () => (
       </ul>
     </div>
     <div className="mt-auto mb-3">
-      <img
-        src={avatar}
-        className="avatar-img rounded-circle"
-        alt="User profile pic"
-      />
+      <UserAuthenticationButton />
     </div>
   </div>
 );

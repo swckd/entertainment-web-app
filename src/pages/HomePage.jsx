@@ -4,8 +4,6 @@ import TrendingContainer from "../components/TrendingContainer/TrendingContainer
 import TopRatedContainer from "../components/TopRatedContainer/TopRatedContainer";
 
 
-
-
 const HomePage = () => {
 
   return (

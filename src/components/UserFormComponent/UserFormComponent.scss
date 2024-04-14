@@ -1,0 +1,22 @@
+@import "../../App.scss";
+.UserFormComponent {
+    background-color: $semi-dark-blue;
+}
+
+
+.btn-primary {
+    @include body-m;
+    background-color: $red;
+    border: 0;
+    &:focus, 
+    &:active, 
+    &:disabled {
+        background-color: $red !important;
+        border: 0 !important;
+    }
+}
+
+.btn-primary:hover {
+    background-color: $white;
+    color: black !important;
+}

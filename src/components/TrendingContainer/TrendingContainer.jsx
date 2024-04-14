@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // API
-import TheMovieDatabaseAPI from '../../services/TheMovieDatabaseAPI ';
+import TheMovieDatabaseAPI from '../../services/TheMovieDatabaseAPI';
 // SCSS
 import './TrendingContainer.scss';
 // Child Components
@@ -16,7 +16,6 @@ const TrendingContainer = () => {
       try {
         const data = await TheMovieDatabaseAPI.getTrendingData();
         setData(data.results);
-        console.log(data);
       } catch (error) {
         throw error;
       }

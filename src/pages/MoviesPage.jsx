@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // API
-import TheMovieDatabaseAPI from '../services/TheMovieDatabaseAPI ';
+import TheMovieDatabaseAPI from '../services/TheMovieDatabaseAPI';
 
 // Child Components
 import Thumbnail from "../components/Thumbnail/Thumbnail";

@@ -1,0 +1,18 @@
+@import "../../App.scss";
+
+.modal-content {
+    color:$greyish-blue !important;
+    background-color: $semi-dark-blue !important;
+  }
+  .modal-header {
+    border-bottom: none;
+    border-top: none;
+  }
+  
+  .modal-footer {
+    border-top: none;
+  }
+  
+  .modal-backdrop.show {
+    opacity: 0.9;
+  }
