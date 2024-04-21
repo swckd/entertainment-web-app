@@ -4,11 +4,12 @@ import { Modal, Button } from "react-bootstrap";
 // CSS
 import "./CustomModal.scss";
 
-const CustomModal = ({ title, content, onHide, show }) => {
+const CustomModal = ({ title, content, onHide, onDecline, show }) => {
   return (
     <Modal
       show={show}
       onHide={onHide}
+      onHide={onDecline}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -18,9 +19,11 @@ const CustomModal = ({ title, content, onHide, show }) => {
       <Modal.Body>{content}</Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={onHide} className="">
-          Go
+          Accept
         </Button>
-
+        <Button variant="warning" onClick={onDecline} className="">
+          Decline
+        </Button>
         {/* Add additional buttons or elements here if needed */}
       </Modal.Footer>
     </Modal>

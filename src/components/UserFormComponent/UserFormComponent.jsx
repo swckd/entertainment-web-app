@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 // To Handle Redirections (from createSessionId)
 import { useNavigate } from "react-router-dom";
-// To get token from URL
-import { useSearchParams } from "react-router-dom";
+
 // CSS
 import "./UserFormComponent.scss";
 
@@ -13,15 +12,17 @@ import TheMovieDatabaseAPI from "../../services/TheMovieDatabaseAPI";
 // Custom Modal Component
 import CustomModal from "../CustomModal/CustomModal";
 
+// Auth Custom Hook
+import { useAuth } from "../../contexts/AuthContext";
+
+// React Bootstrap
+import { Alert } from "react-bootstrap";
+
 const UserFormComponent = () => {
+  const { setIsLoggedIn, setSessionId } = useAuth();
   const navigate = useNavigate();
 
-  // To get the token from the URL, since I don't save it
-  const [searchParams] = useSearchParams();
   const [requestToken, setRequestToken] = useState(null);
-
-  // searchParams.get("request_token")
-  // State variables for the form
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,20 +38,39 @@ const UserFormComponent = () => {
 
   const handleFormSubmission = async (event) => {
     event.preventDefault();
-
-    setRequestToken(searchParams.get("request_token"));
-
+    if (!requestToken) {
+      setShowModal(true);
+    }
     try {
-      await AuthService.createSessionId(
+      const validatedRequestToken = await AuthService.validateRequestToken(
         username,
         password,
         requestToken,
-        navigate
+        setShowAlert,
+        setRequestToken
       );
+
+      if (validatedRequestToken) {
+        // Call createSessionId with the validatedRequestToken
+        const response = await AuthService.createSessionId(
+          validatedRequestToken
+        );
+
+        if (response.success) {
+          // When the session ID is created, update the AuthProvider's state
+          setSessionId(response.session_id);
+          setIsLoggedIn(true);
+          setShowAlert(false);
+          navigate("/user-dashboard/");
+        }
+      }
     } catch (error) {
       console.error("Failed to create Session ID", error);
     }
   };
+
+  // State variables to control the alert
+  const [showAlert, setShowAlert] = useState(false);
 
   // State variables to control the modal
   const [showModal, setShowModal] = useState(false);
@@ -62,6 +82,10 @@ const UserFormComponent = () => {
     setShowModal(false);
     createRequestToken();
   };
+
+  const onDecline = () => {
+    navigate("/");
+  };
   // This will manage the Token Creation, which is in TMDB web, and the API redirects back
   const createRequestToken = async () => {
     if (requestToken) {
@@ -69,13 +93,8 @@ const UserFormComponent = () => {
     }
     try {
       const response = await TheMovieDatabaseAPI.createRequestToken();
-      if (response.success) {
-        // setRequestToken(response.request_token);
-        const redirectToUrl = encodeURIComponent(
-          `${window.location.origin}/login`
-        );
-        const authenticationUrl = `https://www.themoviedb.org/authenticate/${response.request_token}?redirect_to=${redirectToUrl}`;
-        window.location.href = authenticationUrl;
+      if (response) {
+        setRequestToken(response.request_token);
       }
     } catch (error) {
       console.error("Failed to create Request Token", error);
@@ -83,14 +102,11 @@ const UserFormComponent = () => {
   };
 
   useEffect(() => {
-    console.log(requestToken);
-
     if (!requestToken) {
-      console.log(requestToken);
       // Function to open the modal
       setModalTitle("Warning");
       setModalContent(
-        "You are going to be redirected to TMDB web to give your permission to be logged in."
+        "You are going to be logged-in in TMDB, a 3rd Party. Please Accept or Decline."
       );
       setShowModal(true);
     }
@@ -108,6 +124,41 @@ const UserFormComponent = () => {
         ) : (
           ""
         )}
+        {showAlert ? (
+          <Alert
+            variant="danger"
+            onClose={() => setShowAlert(false)}
+            dismissible
+          >
+            <p className="fw-bold">
+              Your username or password might be wrong, or you haven't
+              registered.
+            </p>
+            <p className="m-0">
+              If you want to reset your password click{" "}
+              <Alert.Link
+                href="https://www.themoviedb.org/reset-password"
+                target="_blank"
+              >
+                here
+              </Alert.Link>
+              .
+            </p>
+            <p className="m-0">
+              If you want to register click{" "}
+              <Alert.Link
+                href="https://www.themoviedb.org/signup"
+                target="_blank"
+              >
+                here
+              </Alert.Link>
+              .
+            </p>
+          </Alert>
+        ) : (
+          ""
+        )}
+
         <div className="mb-4">
           <input
             type="text"
@@ -139,6 +190,7 @@ const UserFormComponent = () => {
         title={modalTitle}
         content={modalContent}
         onHide={closeModal}
+        onDecline={onDecline}
         show={showModal}
       />
     </div>

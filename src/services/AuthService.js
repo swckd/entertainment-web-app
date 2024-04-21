@@ -1,44 +1,50 @@
-import { useAuth } from "../contexts/AuthContext";
+
 import TheMovieDatabaseAPI from "./TheMovieDatabaseAPI"
 
-
-
-const createSessionId = async (username, password, requestToken, navigate) => {
+const validateRequestToken = async (username, password, requestToken, setShowAlert, setRequestToken) => {
   try {
-    console.log('Creating session ID...'); // Add this line
+    const response = await TheMovieDatabaseAPI.validateRequestToken(username, password, requestToken);
 
-    const response = await TheMovieDatabaseAPI.createSession(username, password, requestToken);
-    console.log('Response:', response); // And this line
-
-    if (response) {
-      console.log('Coookie...'); // Add this line
-
-      document.cookie = `session_id=${response.session_id}; path=/`;
-      console.log('Document Cookie:', document.cookie); // And this line
-
-      navigate("/user-dashboard");
+    if (response.success === true) {
+      const validatedRequestToken = response.request_token;
+      return validatedRequestToken;
     }
-
+    return response;
   } catch (error) {
-    console.error("Failed to create Session ID", error)
+    console.error("Failed to Validate Request Token", error);
+    setShowAlert(true)
+    setRequestToken("");
   }
 }
 
-const deleteSessionId = async (session_id, setSessionId, navigate) => {
-  console.log(typeof setSessionId); // add this line
+const createSessionId = async (validatedRequestToken) => {
+
+  try {
+    const response = await TheMovieDatabaseAPI.createSession(validatedRequestToken);
+    if (response.success === true) {
+      document.cookie = `session_id=${response.session_id}; path=/`;
+      return response;
+
+    }
+  } catch (error) {
+    console.error("Failed to create Session ID", error);
+
+  }
+}
+
+const deleteSessionId = async (session_id, setSessionId) => {
   try {
     const response = await TheMovieDatabaseAPI.deleteSession(session_id);
-    if (response) {
+    if (response.success === true) {
       document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      setSessionId(null);
-      navigate("/");
+      setSessionId();
+
     }
   } catch (error) {
     console.error("Failed to delete Session ID", error)
   }
 }
 
-export default {
-  createSessionId,
-  deleteSessionId
-}
+const AuthService = { createSessionId, validateRequestToken, deleteSessionId }
+
+export default AuthService

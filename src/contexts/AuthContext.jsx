@@ -1,9 +1,10 @@
 // The useContext hook is imported from React. It allows consuming the context value.
 // The createContext function is imported from React. It's used to create a new context.
 
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 
 import useGetCookie from "../hooks/useGetCookie";
+import TheMovieDatabaseAPI from "../services/TheMovieDatabaseAPI";
 
 // Step 1: Define a context that will be shared within all the app
 // The createContext() function creates a new context object.
@@ -17,16 +18,30 @@ const AuthContext = createContext();
 // This makes the authentication context available to all nested components.
 
 const AuthProvider = ({ children }) => {
-  // Retrieve the session_id from the cookie when the provider is first initialized
   const [sessionId, setSessionId] = useState(useGetCookie("session_id"));
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(sessionId));
+  const [accountData, setAccountData] = useState(null);
 
-  // Determine if the user is logged in based on the session ID
-  const isLoggedIn = Boolean(sessionId);
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      if (sessionId) {
+        const accountData = await TheMovieDatabaseAPI.getAccountData(sessionId);
+        setAccountData(accountData);
+      }
+    };
 
+    fetchAccountData();
+  }, []);
+  console.log(accountData);
+  const authState = {
+    sessionId,
+    isLoggedIn,
+    setSessionId,
+    setIsLoggedIn,
+    accountData,
+  };
   return (
-    <AuthContext.Provider value={{ sessionId, setSessionId, isLoggedIn }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>
   );
 };
 

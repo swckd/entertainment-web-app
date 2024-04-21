@@ -6,8 +6,9 @@ import "./App.scss";
 import Aside from "./components/Aside/Aside";
 import SearchBar from "./components/SearchBar/SearchBar";
 
-// Authentication Context
+// Contexts
 import AuthProvider from "./contexts/AuthContext";
+import WatchlistProvider from "./contexts/WatchlistContext";
 
 // Routes
 import AppRoutes from "./router/AppRoutes";
@@ -21,11 +22,13 @@ function App() {
           <Aside></Aside>
         </div>
         <div className="Main ms-5">
-          <SearchBar></SearchBar>
-          <AppRoutes />
+          <WatchlistProvider>
+            <SearchBar></SearchBar>
+            <AppRoutes />
+          </WatchlistProvider>
         </div>
       </div>
-    </AuthProvider>
+    </AuthProvider >
   );
 }
 

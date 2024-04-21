@@ -1,26 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './BookmarkTag.scss';
+import React from "react";
+import "./BookmarkTag.scss";
+import TheMovieDatabaseAPI from "../../services/TheMovieDatabaseAPI";
 
-// import Thumbnail from '../Thumbnail/Thumbnail';
+// Context API
+import { useAuth } from "../../contexts/AuthContext";
+import { useWatchlistContext } from "../../contexts/WatchlistContext";
 
+const BookmarkTag = ({ data, item }) => {
+  const {
+    watchlist,
+    setWatchlist,
+    addToWatchlist,
+    deleteFromWatchlist,
+    updateWatchlist,
+  } = useWatchlistContext();
 
+  const { accountData } = useAuth();
 
-const BookmarkTag = ({data, item}) => {
+  const isWatchlisted = watchlist.find((element) => element === item.id);
 
-
+  const handleToggleWatchlist = () => {
+    if (!isWatchlisted) {
+      addToWatchlist(item.media_type, item.id);
+    } else {
+      deleteFromWatchlist(item.media_type, item.id);
+    }
+  };
 
   return (
-    <div className='BookmarkTag rounded-circle position-absolute top-0 end-0 mt-2 me-2 d-flex justify-content-center align-items-center' style={{width: "32px", height: "32px"}}
-    
-    
+    <div
+      className="BookmarkTag rounded-circle position-absolute top-0 end-0 mt-2 me-2 d-flex
+      justify-content-center align-items-center"
+      style={{ width: "32px", height: "32px" }}
+      onClick={handleToggleWatchlist}
     >
-      <i className={`bi ${item.isBookmarked === false ? "bi-bookmark" : "bi-bookmark-fill" }`}></i>
+      <i
+        className={`fa-bookmark ${!isWatchlisted ? "fa-regular" : "fa-solid"}`}
+      ></i>
     </div>
   );
 };
-BookmarkTag.propTypes = {};
-
-BookmarkTag.defaultProps = {};
 
 export default BookmarkTag;

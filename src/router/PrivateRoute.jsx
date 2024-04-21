@@ -5,8 +5,11 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const PrivateRoute = () => {
-  const user = useAuth();
-  if (!user.sessionId) return <Navigate to="/login" />;
+  const { isLoggedIn } = useAuth();
+
+  console.log(isLoggedIn);
+
+  if (!isLoggedIn) return <Navigate to="/login" />;
   return <Outlet />;
 };
 

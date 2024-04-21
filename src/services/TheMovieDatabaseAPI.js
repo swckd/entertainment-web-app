@@ -30,7 +30,10 @@ const getTopRatedData = async () => {
       params: { language: 'en-US', page: '1' },
     });
 
-    let myArray = [...movieResponse.data.results, ...seriesResponse.data.results];
+    const movies = movieResponse.data.results.map(movie => ({ ...movie, media_type: 'movie' }));
+    const series = seriesResponse.data.results.map(serie => ({ ...serie, media_type: 'tv' }));
+
+    let myArray = [...movies, ...series];
 
     // This will mix the TV Series and Movies && will give me only 10 items
     return myArray.sort(() => Math.random() - 0.5).slice(0, 10) || [];
@@ -40,6 +43,7 @@ const getTopRatedData = async () => {
     console.error('Failed to fetch Top Rated', error);
   }
 }
+
 
 const getMoviesData = async () => {
   try {
@@ -100,20 +104,29 @@ const createRequestToken = async () => {
   }
 }
 
-const createSession = async (username, password, requestToken) => {
+const validateRequestToken = async (username, password, request_token) => {
+  console.log("got to themoviedb");
   try {
-    const response = await axiosInstance.post("/authentication/session/new",
+    const response = await axiosInstance.post("/authentication/token/validate_with_login",
       {
-        username: `${username}`,
-        password: `${password}`,
-        request_token: `${requestToken}`
-      },
+        "username": username,
+        "password": password,
+        "request_token": request_token
+      });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create Validate Token', error);
+
+  }
+}
+
+const createSession = async (validatedRequestToken) => {
+  try {
+    const response = await axiosInstance.post("authentication/session/new",
       {
-        headers: {
-          'content-type': 'application/json'
-        }
-      }
-    );
+        request_token: validatedRequestToken,
+      });
     return response.data;
   } catch (error) {
     console.error('Failed to create Request Session', error);
@@ -135,13 +148,53 @@ const deleteSession = async (session_id) => {
 
 const getAccountData = async (session_id) => {
   try {
-    const response = await axiosInstance.get(`https://api.themoviedb.org/3/account?session_id=${session_id}`)
+    const response = await axiosInstance.get(`https://api.themoviedb.org/3/account/account_id?session_id=${session_id}`)
     return response.data;
   } catch (error) {
     console.error('Failed to get Account Data', error);
   }
 }
 
+
+const addToWatchlist = async (account_id, media_type, media_id, setWatchlist) => {
+  try {
+    const response = await axiosInstance.post(`https://api.themoviedb.org/3/account/${account_id}/watchlist`,
+      { media_type: media_type, media_id: media_id, watchlist: true });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to add to watchlist', error);
+  }
+
+}
+
+const deleteFromWatchlist = async (account_id, media_type, media_id, setWatchlist) => {
+  try {
+    const response = await axiosInstance.post(`https://api.themoviedb.org/3/account/${account_id}/watchlist`,
+      { media_type: media_type, media_id: media_id, watchlist: false });
+
+    return response.data;
+  } catch (error) {
+    console.error('Failed to delete from watchlist', error);
+  }
+
+}
+
+const getWatchlistItems = async (account_id) => {
+  try {
+    const moviesResponse = await axiosInstance.get(`https://api.themoviedb.org/3/account/${account_id}/watchlist/movies`);
+    const seriesResponse = await axiosInstance.get(`https://api.themoviedb.org/3/account/${account_id}/watchlist/tv`);
+
+    const watchlistItems = [...moviesResponse.data.results, ...seriesResponse.data.results]
+
+    watchlistItems.forEach((item, index) => {
+      watchlistItems[index] = item.id;
+    })
+    return watchlistItems;
+  } catch (error) {
+    console.error('Failed to get watchlist', error);
+  }
+}
 
 
 export default {
@@ -153,7 +206,11 @@ export default {
   getSearchData,
   createGuestSession,
   createRequestToken,
+  validateRequestToken,
   createSession,
   deleteSession,
-  getAccountData
+  getAccountData,
+  addToWatchlist,
+  deleteFromWatchlist,
+  getWatchlistItems
 };
