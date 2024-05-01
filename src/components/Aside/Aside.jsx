@@ -19,12 +19,12 @@ const Aside = () => (
     <div>
       <ul className=" d-md-block d-flex flex-row p-0">
         <li>
-          <Link to="/">
+          <Link to={`${process.env.PUBLIC_URL}/`}>
             <img src={iconnavhome} className=" mx-4 mx-md-0 mt-4" alt="Home" />
           </Link>
         </li>
         <li>
-          <Link to="/movies">
+          <Link to={`${process.env.PUBLIC_URL}/movies`}>
             <img
               src={iconnavmovies}
               className=" mx-4 mx-md-0 mt-4"
@@ -33,7 +33,7 @@ const Aside = () => (
           </Link>
         </li>
         <li>
-          <Link to="/series">
+          <Link to={`${process.env.PUBLIC_URL}/series`}>
             <img
               src={iconnavtvseries}
               className=" mx-4 mx-md-0 mt-4"
@@ -42,7 +42,7 @@ const Aside = () => (
           </Link>
         </li>
         <li>
-          <Link to="/my-bookmarks">
+          <Link to={`${process.env.PUBLIC_URL}/my-bookmarks`}>
             <img
               src={iconnavbookmark}
               className=" mx-4 mx-md-0 mt-4"
