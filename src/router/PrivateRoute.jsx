@@ -7,8 +7,6 @@ import { useAuth } from "../contexts/AuthContext";
 const PrivateRoute = () => {
   const { isLoggedIn } = useAuth();
 
-  console.log(isLoggedIn);
-
   if (!isLoggedIn) return <Navigate to="/login" />;
   return <Outlet />;
 };

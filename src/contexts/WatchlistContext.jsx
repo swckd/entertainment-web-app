@@ -26,6 +26,17 @@ const WatchlistProvider = ({ children }) => {
     }
   };
 
+  const getWatchlisted = async () => {
+    try {
+      const watchlisted = await TheMovieDatabaseAPI.getWatchlisted(
+        accountData.id
+      );
+      return watchlisted;
+    } catch (error) {
+      console.error("Failed to fetch watchlist items", error);
+    }
+  };
+
   const addToWatchlist = async (media_type, media_id) => {
     try {
       const data = await TheMovieDatabaseAPI.addToWatchlist(
@@ -71,6 +82,7 @@ const WatchlistProvider = ({ children }) => {
     addToWatchlist,
     deleteFromWatchlist,
     updateWatchlist,
+    getWatchlisted,
   };
 
   return (

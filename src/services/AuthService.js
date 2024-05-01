@@ -8,6 +8,7 @@ const validateRequestToken = async (username, password, requestToken, setShowAle
     if (response.success === true) {
       const validatedRequestToken = response.request_token;
       return validatedRequestToken;
+
     }
     return response;
   } catch (error) {
@@ -32,12 +33,14 @@ const createSessionId = async (validatedRequestToken) => {
   }
 }
 
-const deleteSessionId = async (session_id, setSessionId) => {
+const deleteSessionId = async (session_id, setSessionId, setIsLoggedIn, setAccountData) => {
   try {
     const response = await TheMovieDatabaseAPI.deleteSession(session_id);
     if (response.success === true) {
       document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      setSessionId();
+      setSessionId(null);
+      setIsLoggedIn(false);
+      setAccountData(null);
 
     }
   } catch (error) {

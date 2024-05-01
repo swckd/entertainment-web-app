@@ -31,14 +31,15 @@ const AuthProvider = ({ children }) => {
     };
 
     fetchAccountData();
-  }, []);
-  console.log(accountData);
+  }, [sessionId]);
+
   const authState = {
     sessionId,
     isLoggedIn,
     setSessionId,
     setIsLoggedIn,
     accountData,
+    setAccountData,
   };
   return (
     <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>

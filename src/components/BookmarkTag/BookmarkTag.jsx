@@ -1,9 +1,7 @@
 import React from "react";
 import "./BookmarkTag.scss";
-import TheMovieDatabaseAPI from "../../services/TheMovieDatabaseAPI";
 
 // Context API
-import { useAuth } from "../../contexts/AuthContext";
 import { useWatchlistContext } from "../../contexts/WatchlistContext";
 
 const BookmarkTag = ({ data, item }) => {
@@ -14,8 +12,6 @@ const BookmarkTag = ({ data, item }) => {
     deleteFromWatchlist,
     updateWatchlist,
   } = useWatchlistContext();
-
-  const { accountData } = useAuth();
 
   const isWatchlisted = watchlist.find((element) => element === item.id);
 

@@ -18,16 +18,17 @@ const UserAuthenticationButton = () => {
 
   useEffect(() => {
     if (accountData) {
-      console.log(accountData);
       setAvatar(
         `https://www.gravatar.com/avatar/${accountData.avatar.gravatar.hash}`
       );
+    } else {
+      setAvatar(avatar);
     }
-  }, [accountData]);
+  }, [accountData, avatar]);
 
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Logged-in as {accountData.username}
+      {accountData ? `Logged-in as ${accountData.username}` : "Click to log-in"}
     </Tooltip>
   );
 

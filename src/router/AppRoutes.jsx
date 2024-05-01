@@ -1,11 +1,12 @@
-import { Route, Routes } from 'react-router-dom';
-import HomePage from "../pages/HomePage"
-import MoviesPage from '../pages/MoviesPage';
-import SeriesPage from '../pages/SeriesPage';
-import SearchResultsPage from '../pages/SearchResultsPage';
-import UserLoginPage from '../pages/UserLoginPage';
-import UserDashboardPage from '../pages/UserDashboardPage';
-import PrivateRoute from './PrivateRoute';
+import { Route, Routes } from "react-router-dom";
+import HomePage from "../pages/HomePage";
+import MoviesPage from "../pages/MoviesPage";
+import SeriesPage from "../pages/SeriesPage";
+import SearchResultsPage from "../pages/SearchResultsPage";
+import UserLoginPage from "../pages/UserLoginPage";
+import UserDashboardPage from "../pages/UserDashboardPage";
+import PrivateRoute from "./PrivateRoute";
+import BookmarkedPage from "../pages/BookmarkedPage";
 
 function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ function AppRoutes() {
       <Route path="/" element={<HomePage />} />
       <Route path="movies" element={<MoviesPage />} />
       <Route path="series" element={<SeriesPage />} />
+      <Route path="my-bookmarks" element={<BookmarkedPage />} />
       <Route path="search-results" element={<SearchResultsPage />} />
       <Route path="login" element={<UserLoginPage />} />
       <Route element={<PrivateRoute />}>

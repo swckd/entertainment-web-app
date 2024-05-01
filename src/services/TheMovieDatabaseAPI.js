@@ -45,31 +45,36 @@ const getTopRatedData = async () => {
 }
 
 
-const getMoviesData = async () => {
+const getMoviesData = async (page) => {
   try {
     const response = await axiosInstance.get('/trending/movie/day',
       {
-        params: { language: 'en-US' },
+        params: { language: 'en-US', page: page },
+
       });
-    return response.data;
+    const data = response.data;
+    return data;
+
   } catch (error) {
     console.error('Failed to fetch movies', error);
   }
 }
 
-const getSeriesData = async () => {
+const getSeriesData = async (page) => {
   try {
     const response = await axiosInstance.get('/tv/popular',
       {
-        params: { language: 'en-US', page: '1' },
+        params: { language: 'en-US', page: page },
       });
-    return response.data;
+    const data = response.data.results;
+    const result = data.map((serie) => ({ ...serie, media_type: 'tv' }));
+    return result;
   } catch (error) {
     console.error('Failed to fetch series', error);
   }
 }
 
-const getSearchData = async (query) => {
+const getSearchData = async (query, page = 1) => {
   try {
     const response = await axiosInstance.get("/search/multi",
       {
@@ -77,9 +82,10 @@ const getSearchData = async (query) => {
           query: query,
           include_adult: 'false',
           language: 'en-US',
-          page: '1',
+          page: page
         }
       });
+
     return response.data;
   } catch (error) {
     console.error('Failed to fetch query', error);
@@ -105,7 +111,6 @@ const createRequestToken = async () => {
 }
 
 const validateRequestToken = async (username, password, request_token) => {
-  console.log("got to themoviedb");
   try {
     const response = await axiosInstance.post("/authentication/token/validate_with_login",
       {
@@ -113,7 +118,6 @@ const validateRequestToken = async (username, password, request_token) => {
         "password": password,
         "request_token": request_token
       });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Failed to create Validate Token', error);
@@ -179,7 +183,7 @@ const deleteFromWatchlist = async (account_id, media_type, media_id, setWatchlis
   }
 
 }
-
+// Only retrieves IDs (for bookmark button functionality)
 const getWatchlistItems = async (account_id) => {
   try {
     const moviesResponse = await axiosInstance.get(`https://api.themoviedb.org/3/account/${account_id}/watchlist/movies`);
@@ -190,7 +194,25 @@ const getWatchlistItems = async (account_id) => {
     watchlistItems.forEach((item, index) => {
       watchlistItems[index] = item.id;
     })
+
     return watchlistItems;
+  } catch (error) {
+    console.error('Failed to get watchlist', error);
+  }
+}
+
+// Retrives full objects (for my bookmark page)
+const getWatchlisted = async (account_id) => {
+  try {
+    const moviesResponse = await axiosInstance.get(`https://api.themoviedb.org/3/account/${account_id}/watchlist/movies`);
+    const seriesResponse = await axiosInstance.get(`https://api.themoviedb.org/3/account/${account_id}/watchlist/tv`);
+
+    const movies = moviesResponse.data.results.map(movie => ({ ...movie, media_type: 'movie' }));
+    const series = seriesResponse.data.results.map(serie => ({ ...serie, media_type: 'tv' }));
+    const watchlisted = [...movies, ...series]
+
+
+    return watchlisted;
   } catch (error) {
     console.error('Failed to get watchlist', error);
   }
@@ -212,5 +234,6 @@ export default {
   getAccountData,
   addToWatchlist,
   deleteFromWatchlist,
-  getWatchlistItems
+  getWatchlistItems,
+  getWatchlisted
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // CSS
 import "./Aside.scss";
 // Images
@@ -11,7 +11,6 @@ import iconnavbookmark from "../../assets/icon-nav-bookmark.svg";
 // Child Components
 import UserAuthenticationButton from "../UserAuthenticationButton/UserAuthenticationButton";
 
-
 const Aside = () => (
   <div className="Aside d-flex flex-column text-center">
     <div className="mt-4 mb-4">
@@ -21,23 +20,23 @@ const Aside = () => (
       <ul className="p-0">
         <li>
           <Link to="/">
-            <img src={iconnavhome} className="mt-4" alt="Home"/>
+            <img src={iconnavhome} className="mt-4" alt="Home" />
           </Link>
         </li>
         <li>
-        <Link to="/movies">
-            <img src={iconnavmovies} className="mt-4" alt="Movies"/>
-            </Link>
+          <Link to="/movies">
+            <img src={iconnavmovies} className="mt-4" alt="Movies" />
+          </Link>
         </li>
         <li>
-        <Link to="/series">
+          <Link to="/series">
             <img src={iconnavtvseries} className="mt-4" alt="TV Series" />
-            </Link>
+          </Link>
         </li>
         <li>
-        <Link to="/">
-            <img src={iconnavbookmark} className="mt-4"  alt="My Bookmarks"/>
-            </Link>
+          <Link to="/my-bookmarks">
+            <img src={iconnavbookmark} className="mt-4" alt="My Bookmarks" />
+          </Link>
         </li>
       </ul>
     </div>
@@ -46,7 +45,5 @@ const Aside = () => (
     </div>
   </div>
 );
-
-
 
 export default Aside;

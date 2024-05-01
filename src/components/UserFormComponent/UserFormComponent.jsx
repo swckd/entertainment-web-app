@@ -19,7 +19,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Alert } from "react-bootstrap";
 
 const UserFormComponent = () => {
-  const { setIsLoggedIn, setSessionId } = useAuth();
+  const { setIsLoggedIn, setSessionId, isLoggedIn, sessionId } = useAuth();
   const navigate = useNavigate();
 
   const [requestToken, setRequestToken] = useState(null);
@@ -61,7 +61,10 @@ const UserFormComponent = () => {
           setSessionId(response.session_id);
           setIsLoggedIn(true);
           setShowAlert(false);
-          navigate("/user-dashboard/");
+
+          if (sessionId && isLoggedIn) {
+            navigate("/user-dashboard/");
+          }
         }
       }
     } catch (error) {
