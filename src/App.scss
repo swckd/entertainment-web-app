@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
-
 // Variables
 // Colors
 $white: #ffffff;
@@ -70,10 +69,9 @@ body {
 }
 
 .Aside {
-  width: 96px;
+  @media (min-width: 768px) {
+    /* md screens and up */
+    height: 95vh;
+    width: 96px;
+  }
 }
-
-.Main {
-  width: (calc(100% - (96px - 32px)));
-}
-

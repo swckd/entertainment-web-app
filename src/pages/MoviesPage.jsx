@@ -35,7 +35,7 @@ const MoviesPage = () => {
   return (
     <div className="Movies">
       <h2>Movies</h2>
-      <div className="Thumbnail d-flex flex-row flex-wrap">
+      <div className="Thumbnail d-flex flex-row flex-wrap justify-content-center">
         {data &&
           data.map((movie, index) => (
             <Thumbnail key={index} item={movie} parent="Movies" />

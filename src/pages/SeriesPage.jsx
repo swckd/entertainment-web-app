@@ -34,7 +34,7 @@ const SeriesPage = () => {
   return (
     <div className="Series">
       <h2>Series</h2>
-      <div className="Thumbnail d-flex flex-row flex-wrap">
+      <div className="Thumbnail d-flex flex-row flex-wrap justify-content-center">
         {data &&
           data.map((serie, index) => (
             <Thumbnail key={index} item={serie} parent="TV" />

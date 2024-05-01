@@ -24,7 +24,7 @@ const Thumbnail = ({ item }) => {
       />
       <BookmarkTag item={item} />
       <figcaption className="figure-caption">
-        <div className="figure-description d-flex align-items-center">
+        <div className="figure-description d-flex align-items-center justify-content-center">
           {item.first_air_date
             ? item.first_air_date.substring(0, 4)
             : item.release_date

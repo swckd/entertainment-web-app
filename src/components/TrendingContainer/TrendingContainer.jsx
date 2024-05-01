@@ -24,7 +24,7 @@ const TrendingContainer = () => {
   return (
     <div className="TrendingContainer">
       <h2>Trending</h2>
-      <div className="Thumbnail d-flex flex-row flex-wrap">
+      <div className="Thumbnail d-flex flex-row flex-wrap justify-content-center">
         {data &&
           data.map((movie, index) => <Thumbnail key={index} item={movie} />)}
       </div>
