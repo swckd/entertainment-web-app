@@ -1,7 +1,7 @@
 # Entertainment Web App
 ![Alt Text](chrome-capture-2024-4-2.gif)
-![Alt Text](chrome-capture-2024-4-2(2).gif)
-![Alt Text](chrome-capture-2024-4-2(3).gif)
+![Alt Text](chrome-capture-2024-4-2 (1).gif)
+![Alt Text](chrome-capture-2024-4-2 (2).gif)
 
 ## Overview
 
