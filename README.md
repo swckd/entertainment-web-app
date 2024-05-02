@@ -1,8 +1,11 @@
 # Entertainment Web App
+![Alt Text](chrome-capture-2024-4-2.gif)
+![Alt Text](chrome-capture-2024-4-2.gif)
+![Alt Text](chrome-capture-2024-4-2.gif)
 
 ## Overview
 
-Your project is a web application built with React, a popular JavaScript library for building user interfaces. The project was bootstrapped with Create React App, a tool that sets up a modern web app by running one command.
+This project is a web application built with React, a popular JavaScript library for building user interfaces. The project was bootstrapped with Create React App, a tool that sets up a modern web app by running one command.
 
 ## Features
 
