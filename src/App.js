@@ -15,6 +15,8 @@ import AppRoutes from "./router/AppRoutes";
 
 
 function App() {
+  const basename = process.env.NODE_ENV === 'production' ? '/entertainment-web-app' : '/';
+
   return (
     <AuthProvider>
       <div className="App container-fluid">
@@ -25,7 +27,7 @@ function App() {
           <div className="col-xs-12 col-md-11 px-5 Main">
             <WatchlistProvider>
               <SearchBar></SearchBar>
-              <AppRoutes />
+              <AppRoutes basename={basename} />
             </WatchlistProvider>
           </div>
         </div>
