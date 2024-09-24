@@ -2,7 +2,6 @@
   "name": "entertainment-web-app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://swckd.github.io/entertainment-web-app",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -21,9 +20,7 @@
     "start": "react-scripts start",
     "build": "cross-env NODE_ENV=production react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -44,7 +41,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1",
     "cross-env": "^7.0.3"
   }
 }

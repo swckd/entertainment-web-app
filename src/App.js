@@ -21,7 +21,7 @@ function App() {
     <AuthProvider>
       <div className="App container-fluid">
         <div className="row">
-          <div className="col-xs-12 col-md-1 Aside">
+          <div className="col-xs-12 col-md-1 Aside ps-0">
             <Aside></Aside>
           </div>
           <div className="col-xs-12 col-md-11 px-5 Main">
