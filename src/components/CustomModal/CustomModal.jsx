@@ -4,12 +4,16 @@ import { Modal, Button } from "react-bootstrap";
 // CSS
 import "./CustomModal.scss";
 
-const CustomModal = ({ title, content, onHide, onDecline, show }) => {
+const CustomModal = ({ title, content, onHide, onDecline, show,
+  onAccept,
+  acceptLabel = "Accept",
+  declineLabel = "Decline"
+
+}) => {
   return (
     <Modal
       show={show}
       onHide={onHide}
-      onHide={onDecline}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -18,13 +22,24 @@ const CustomModal = ({ title, content, onHide, onDecline, show }) => {
       </Modal.Header>
       <Modal.Body>{content}</Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={onHide} className="">
-          Accept
-        </Button>
-        <Button variant="warning" onClick={onDecline} className="">
-          Decline
-        </Button>
+
+        {onAccept && (
+          <Button variant="primary" onClick={onAccept}>
+            {acceptLabel}
+          </Button>
+        )}
+
+        {onDecline && (
+          <Button variant="warning" onClick={onDecline}>
+            {declineLabel}
+          </Button>
+        )}
+
+
         {/* Add additional buttons or elements here if needed */}
+
+
+
       </Modal.Footer>
     </Modal>
   );

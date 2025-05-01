@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 // CSS
 import "./Aside.scss";
 // Images
@@ -11,51 +11,57 @@ import iconnavbookmark from "../../assets/icon-nav-bookmark.svg";
 // Child Components
 import UserAuthenticationButton from "../UserAuthenticationButton/UserAuthenticationButton";
 
-const Aside = () => (
-  <div className="Aside d-flex flex-xs-row flex-md-column text-center justify-content-center">
-    <div className="mt-4 mb-4">
-      <img src={logo} alt="logo" className=" mx-4 mx-md-0 " />
-    </div>
-    <div>
-      <ul className=" d-md-block d-flex flex-row p-0">
-        <li>
-          <Link to={`${process.env.PUBLIC_URL}/`}>
-            <img src={iconnavhome} className=" mx-4 mx-md-0 mt-4" alt="Home" />
-          </Link>
+
+const Aside = () => {
+
+  return (
+
+
+    <div className="Aside d-flex flex-row flex-md-column justify-content-between text-center position-fixed h-75 px-4">
+      <div className="d-md-none">
+        <img src={logo} className="mt-4" alt="Logo" />
+      </div>
+      <ul className="d-flex flex-row flex-md-column p-0">
+        <li className="d-none d-md-block">
+          <img src={logo} className="mt-4" alt="Logo" />
         </li>
-        <li>
-          <Link to={`${process.env.PUBLIC_URL}/movies`}>
-            <img
-              src={iconnavmovies}
-              className=" mx-4 mx-md-0 mt-4"
-              alt="Movies"
-            />
-          </Link>
+        <li className="mr-sm-3">
+          <NavLink
+            to={`${process.env.PUBLIC_URL}/`}
+            className={({ isActive }) => (isActive ? "active-link" : "")}
+          >
+            <img src={iconnavhome} className="mt-4" alt="Home" />
+          </NavLink>
         </li>
-        <li>
-          <Link to={`${process.env.PUBLIC_URL}/series`}>
-            <img
-              src={iconnavtvseries}
-              className=" mx-4 mx-md-0 mt-4"
-              alt="TV Series"
-            />
-          </Link>
+        <li className="mr-sm-3">
+          <NavLink
+            to={`${process.env.PUBLIC_URL}/movies`}
+            className={({ isActive }) => (isActive ? "active-link" : "")}>
+            <img src={iconnavmovies} className="mt-4" alt="Movies" />
+          </NavLink>
         </li>
-        <li>
-          <Link to={`${process.env.PUBLIC_URL}/my-bookmarks`}>
-            <img
-              src={iconnavbookmark}
-              className=" mx-4 mx-md-0 mt-4"
-              alt="My Bookmarks"
-            />
-          </Link>
+        <li className="mr-sm-3">
+          <NavLink
+            to={`${process.env.PUBLIC_URL}/series`}
+            className={({ isActive }) => (isActive ? "active-link" : "")}>
+            <img src={iconnavtvseries} className="mt-4" alt="TV Series" />
+          </NavLink>
+        </li>
+        <li className="mr-sm-3">
+          <NavLink
+            to={`${process.env.PUBLIC_URL}/my-bookmarks`}
+            className={({ isActive }) => (isActive ? "active-link" : "")}>
+            <img src={iconnavbookmark} className="mt-4" alt="My Bookmarks" />
+          </NavLink>
         </li>
       </ul>
+      <div className="p-0 mb-5">
+        <UserAuthenticationButton />
+      </div>
     </div>
-    <div className="mt-auto mb-3 mx-4 mx-md-0 ">
-      <UserAuthenticationButton />
-    </div>
-  </div>
-);
+
+  );
+
+};
 
 export default Aside;

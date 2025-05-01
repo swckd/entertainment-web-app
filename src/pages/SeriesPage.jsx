@@ -1,54 +1,52 @@
 import React, { useEffect, useState } from "react";
-
-// API
-import TheMovieDatabaseAPI from "../services/TheMovieDatabaseAPI";
+import { useSeries } from "../contexts/SeriesContext";
+import { useInView } from "react-intersection-observer";
 
 // Child Components
 import Thumbnail from "../components/Thumbnail/Thumbnail";
 
 const SeriesPage = () => {
-  const [data, setData] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    seriesData,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status } = useSeries();
+
+
+  const { ref, inView } = useInView();
+
+  // Detecta si el usuario ha llegado al final y carga más datos automáticamente
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await TheMovieDatabaseAPI.getSeriesData(currentPage);
-        setData(data);
-      } catch (error) {
-        console.error("Failed to fetch series", error);
-      }
-    };
-    fetchData();
-  }, [currentPage]);
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
-  };
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+
+  if (status === 'pending') return <p>Loading trending data...</p>;
+  if (status === 'error') return <p>Error loading trending data: {error.message}</p>;
+
 
   return (
     <div className="Series">
       <h2>Series</h2>
       <div className="Thumbnail d-flex flex-row flex-wrap justify-content-center">
-        {data &&
-          data.map((serie, index) => (
+        {seriesData &&
+          seriesData.map((serie, index) => (
             <Thumbnail key={index} item={serie} parent="TV" />
           ))}
       </div>
-      <div className="mb-5">
-        <button onClick={handlePreviousPage} className="btn btn-danger">
-          Previous
-        </button>
-        <span className="mx-2">{currentPage}</span>
-        <button onClick={handleNextPage} className="btn btn-danger ms-1">
-          Next
-        </button>
-      </div>
+
+
+      {/* Elemento de referencia para detectar el scroll */}
+      {isFetchingNextPage && <p>Loading more...</p>}
+
+      {/* Elemento al final de la lista para detectar el scroll */}
+      <div ref={ref} style={{ height: '1px' }}></div>
+
     </div>
   );
 };

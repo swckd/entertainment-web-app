@@ -1,55 +1,56 @@
-import React, { useEffect, useState } from "react";
-
-// API
-import TheMovieDatabaseAPI from "../services/TheMovieDatabaseAPI";
+import React, { useEffect, useRef } from "react";
+import { useMovies } from "../contexts/MoviesContext";
+import { useInView } from "react-intersection-observer";
+import { useLocation } from "react-router-dom";
 
 // Child Components
 import Thumbnail from "../components/Thumbnail/Thumbnail";
 
 const MoviesPage = () => {
-  const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    moviesData,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status } = useMovies();
+
+
+  const { ref, inView } = useInView();
+  const location = useLocation(); // Get the current location
+  const moviesRef = useRef(null); // Create a ref for the "movies" section
+  // Detecta si el usuario ha llegado al final y carga más datos automáticamente
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await TheMovieDatabaseAPI.getMoviesData(currentPage);
-        setData(data.results);
-      } catch (error) {
-        console.error("Failed to fetch movies", error);
-      }
-    };
-    fetchData();
-  }, [currentPage]);
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+    if (moviesRef.current) {
+      moviesRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, [location]);
+
+  if (status === 'pending') return <p>Loading trending data...</p>;
+  if (status === 'error') return <p>Error loading trending data: {error.message}</p>;
 
   return (
-    <div className="Movies">
+    <div className="Movies" id="movies">
       <h2>Movies</h2>
       <div className="Thumbnail d-flex flex-row flex-wrap justify-content-center">
-        {data &&
-          data.map((movie, index) => (
+        {moviesData &&
+          moviesData.map((movie, index) => (
             <Thumbnail key={index} item={movie} parent="Movies" />
           ))}
       </div>
-      <div className="mb-5">
-        <button onClick={handlePreviousPage} className="btn btn-danger">
-          Previous
-        </button>
-        <span className="mx-2">{currentPage}</span>
-        <button onClick={handleNextPage} className="btn btn-danger ms-1">
-          Next
-        </button>
-      </div>
+
+      {/* Elemento de referencia para detectar el scroll */}
+      {isFetchingNextPage && <p>Loading more...</p>}
+
+      {/* Elemento al final de la lista para detectar el scroll */}
+      <div ref={ref} style={{ height: '1px' }}></div>
     </div>
   );
 };

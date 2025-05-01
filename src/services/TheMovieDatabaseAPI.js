@@ -9,9 +9,9 @@ const axiosInstance = axios.create({
   }
 });
 
-const getTrendingData = async () => {
+const getTrendingData = async (pageParam) => {
   try {
-    const response = await axiosInstance.get('/trending/all/day', {
+    const response = await axiosInstance.get('/trending/all/day?page=' + pageParam, {
       params: { language: 'en-US' },
     });
     return response.data;
@@ -45,11 +45,11 @@ const getTopRatedData = async () => {
 }
 
 
-const getMoviesData = async (page) => {
+const getMoviesData = async (pageParam) => {
   try {
     const response = await axiosInstance.get('/trending/movie/day',
       {
-        params: { language: 'en-US', page: page },
+        params: { language: 'en-US', page: pageParam },
 
       });
     const data = response.data;
@@ -60,21 +60,20 @@ const getMoviesData = async (page) => {
   }
 }
 
-const getSeriesData = async (page) => {
+const getSeriesData = async (pageParam) => {
   try {
     const response = await axiosInstance.get('/tv/popular',
       {
-        params: { language: 'en-US', page: page },
+        params: { language: 'en-US', page: pageParam },
       });
-    const data = response.data.results;
-    const result = data.map((serie) => ({ ...serie, media_type: 'tv' }));
-    return result;
+    const data = response.data;
+    return data;
   } catch (error) {
     console.error('Failed to fetch series', error);
   }
 }
 
-const getSearchData = async (query, page = 1) => {
+const getSearchData = async (query, pageParam) => {
   try {
     const response = await axiosInstance.get("/search/multi",
       {
@@ -82,10 +81,9 @@ const getSearchData = async (query, page = 1) => {
           query: query,
           include_adult: 'false',
           language: 'en-US',
-          page: page
+          page: pageParam
         }
       });
-
     return response.data;
   } catch (error) {
     console.error('Failed to fetch query', error);
@@ -210,7 +208,6 @@ const getWatchlisted = async (account_id) => {
     const movies = moviesResponse.data.results.map(movie => ({ ...movie, media_type: 'movie' }));
     const series = seriesResponse.data.results.map(serie => ({ ...serie, media_type: 'tv' }));
     const watchlisted = [...movies, ...series]
-
 
     return watchlisted;
   } catch (error) {

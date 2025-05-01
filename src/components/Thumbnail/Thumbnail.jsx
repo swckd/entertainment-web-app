@@ -24,12 +24,12 @@ const Thumbnail = ({ item }) => {
       />
       <BookmarkTag item={item} />
       <figcaption className="figure-caption">
-        <div className="figure-description d-flex align-items-center justify-content-center">
+        <div className="figure-description d-flex ">
           {item.first_air_date
             ? item.first_air_date.substring(0, 4)
             : item.release_date
-            ? item.release_date.substring(0, 4)
-            : "N/A"}{" "}
+              ? item.release_date.substring(0, 4)
+              : "N/A"}{" "}
           ·{" "}
           {item.media_type
             ? item.media_type.charAt(0).toUpperCase() + item.media_type.slice(1)

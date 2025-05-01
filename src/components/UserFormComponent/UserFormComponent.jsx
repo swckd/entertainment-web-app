@@ -19,7 +19,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Alert } from "react-bootstrap";
 
 const UserFormComponent = () => {
-  const { setIsLoggedIn, setSessionId, isLoggedIn, sessionId } = useAuth();
+  const { setIsLoggedIn, setSessionId, isLoggedIn, sessionId, setAvatar } = useAuth();
   const navigate = useNavigate();
 
   const [requestToken, setRequestToken] = useState(null);
@@ -81,52 +81,69 @@ const UserFormComponent = () => {
   const [modalContent, setModalContent] = useState("");
 
   // Function to close the modal
-  const closeModal = () => {
-    setShowModal(false);
-    createRequestToken();
-  };
+  // const closeModal = () => {
+  //   setShowModal(false);
+  //   createRequestToken();
+  // };
 
   const onDecline = () => {
     navigate("/");
   };
-  // This will manage the Token Creation, which is in TMDB web, and the API redirects back
-  const createRequestToken = async () => {
+
+  useEffect(() => {
     if (requestToken) {
       return;
     }
-    try {
-      const response = await TheMovieDatabaseAPI.createRequestToken();
-      if (response) {
-        setRequestToken(response.request_token);
+    const getRequestToken = async () => {
+      try {
+        const response = await TheMovieDatabaseAPI.createRequestToken();
+        if (response) {
+          setRequestToken(response.request_token);
+        }
+      } catch (error) {
+        console.error("Failed to create Request Token", error);
       }
-    } catch (error) {
-      console.error("Failed to create Request Token", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!requestToken) {
-      // Function to open the modal
-      setModalTitle("Warning");
-      setModalContent(
-        "You are going to be logged-in in TMDB, a 3rd Party. Please Accept or Decline."
-      );
-      setShowModal(true);
-    }
+    };
+    getRequestToken(); // Call the function
   }, [requestToken]);
+  // // This will manage the Token Creation, which is in TMDB web, and the API redirects back
+  // const createRequestToken = async () => {
+  //   if (requestToken) {
+  //     return;
+  //   }
+  //   try {
+  //     const response = await TheMovieDatabaseAPI.createRequestToken();
+  //     if (response) {
+  //       setRequestToken(response.request_token);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to create Request Token", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (!requestToken) {
+  //     // Function to open the modal
+  //     setModalTitle("Warning");
+  //     setModalContent(
+  //       "You are going to be logged-in in TMDB, a 3rd Party. Please Accept or Decline."
+  //     );
+  //     setShowModal(true);
+  //   }
+  // }, [requestToken]);
 
   return (
     <div className="UserFormComponent rounded w-50 m-auto p-5">
       <h2 className="mb-4">Login</h2>
       <form onSubmit={handleFormSubmission}>
-        {requestToken ? (
+        {/* {requestToken ? (
           <div className="alert alert-secondary" role="alert">
             You hace successfully accepted the Authenticacion Request. Please
             insert your email and password below to continue.
           </div>
         ) : (
           ""
-        )}
+        )} */}
         {showAlert ? (
           <Alert
             variant="danger"
@@ -186,16 +203,27 @@ const UserFormComponent = () => {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
+          <p>
+            Don't you have an account?{" "}
+            <a href="https://www.themoviedb.org/signup" target="_blank" rel="noopener noreferrer">
+              Register @ TMDB
+            </a>
+            .
+          </p>
+
         </div>
       </form>
 
-      <CustomModal
+      {/* <CustomModal
         title={modalTitle}
         content={modalContent}
-        onHide={closeModal}
+        onAccept={closeModal}
         onDecline={onDecline}
         show={showModal}
-      />
+
+        acceptLabel="I agree"
+        declineLabel="Cancel"
+      /> */}
     </div>
   );
 };

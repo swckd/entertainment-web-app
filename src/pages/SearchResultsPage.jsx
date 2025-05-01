@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useSearch } from "../contexts/SearchContext";
+import { useInView } from "react-intersection-observer";
+
 
 // API
 import TheMovieDatabaseAPI from "../services/TheMovieDatabaseAPI";
@@ -8,53 +11,44 @@ import TheMovieDatabaseAPI from "../services/TheMovieDatabaseAPI";
 import Thumbnail from "../components/Thumbnail/Thumbnail";
 
 const SearchResultsPage = () => {
-  const location = useLocation();
-  const query = location.state && location.state.query;
+  const {
+    query,
+    searchData,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status } = useSearch();
 
-  const [data, setData] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const { ref, inView } = useInView();
+
+  // Detecta si el usuario ha llegado al final y carga más datos automáticamente
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await TheMovieDatabaseAPI.getSearchData(
-          query,
-          currentPage
-        );
-        setData(data.results);
-      } catch (error) {
-        console.error("Failed to fetch query", error);
-      }
-    };
-    fetchData();
-  }, [query, currentPage]);
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
-  };
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+
+  if (status === 'pending') return <p>Loading trending data...</p>;
+  if (status === 'error') return <p>Error loading trending data: {error.message}</p>;
+
 
   return (
     <div className="SearchResultsPage">
       <h2>Results for: {query}</h2>
       <div className="Thumbnail d-flex flex-row flex-wrap">
-        {data &&
-          data.map((item, index) => <Thumbnail key={index} item={item} />)}
+        {searchData &&
+          searchData.map((item, index) => <Thumbnail key={index} item={item} />)}
       </div>
-      <div className="mb-5">
-        <button onClick={handlePreviousPage} className="btn btn-danger">
-          Previous
-        </button>
-        <span className="mx-2">{currentPage}</span>
-        <button onClick={handleNextPage} className="btn btn-danger ms-1">
-          Next
-        </button>
-      </div>
+      {/* Elemento de referencia para detectar el scroll */}
+      {isFetchingNextPage && <p>Loading more...</p>}
+
+      {/* Elemento al final de la lista para detectar el scroll */}
+      <div ref={ref} style={{ height: '1px' }}></div>
+
     </div>
   );
 };

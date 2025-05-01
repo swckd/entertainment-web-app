@@ -4,19 +4,23 @@
   background-color: $semi-dark-blue;
   border-radius: 20px;
 
-  height: 100%;
-  // position: fixed;
-
   ul {
     list-style-type: none;
 
     li {
       a {
         img {
+
           &:hover,
           &:active {
             filter: brightness(0) invert(1);
           }
+        }
+
+        // Style for the active link
+        &.active-link img {
+          filter: brightness(0) invert(1); // Example: Apply the same hover effect
+          border-bottom: 2px solid $white; // Example: Add a border to the active link
         }
       }
     }

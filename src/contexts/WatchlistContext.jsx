@@ -15,6 +15,7 @@ const WatchlistProvider = ({ children }) => {
     }
   }, [accountData]);
 
+
   const getWatchlistItems = async () => {
     try {
       const watchlistItems = await TheMovieDatabaseAPI.getWatchlistItems(

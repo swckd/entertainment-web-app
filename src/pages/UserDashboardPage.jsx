@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import avatarImg from "../assets/placeholder.jpg";
 
 // Context API
 import { useAuth } from "../contexts/AuthContext";
@@ -8,21 +9,28 @@ import { useAuth } from "../contexts/AuthContext";
 import AuthService from "../services/AuthService";
 
 const UserDashboardPage = () => {
+
+  // Contexts
   const {
+    setAvatar,
     sessionId,
     setSessionId,
     accountData,
     setIsLoggedIn,
     setAccountData,
   } = useAuth();
+
+  // Navigation
   const navigate = useNavigate();
 
+  // Handlers
   const handleLogOutButton = () => {
     AuthService.deleteSessionId(
       sessionId,
       setSessionId,
       setIsLoggedIn,
-      setAccountData
+      setAccountData,
+      setAvatar(avatarImg)
     );
     navigate("/");
   };

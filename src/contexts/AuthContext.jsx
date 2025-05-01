@@ -1,3 +1,5 @@
+import avatarImg from "../assets/placeholder.jpg"
+
 // The useContext hook is imported from React. It allows consuming the context value.
 // The createContext function is imported from React. It's used to create a new context.
 
@@ -21,12 +23,15 @@ const AuthProvider = ({ children }) => {
   const [sessionId, setSessionId] = useState(useGetCookie("session_id"));
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(sessionId));
   const [accountData, setAccountData] = useState(null);
+  const [avatar, setAvatar] = useState(avatarImg);
+
 
   useEffect(() => {
     const fetchAccountData = async () => {
       if (sessionId) {
         const accountData = await TheMovieDatabaseAPI.getAccountData(sessionId);
         setAccountData(accountData);
+        setAvatar(`https://www.gravatar.com/avatar/${accountData.avatar.gravatar.hash}`)
       }
     };
 
@@ -34,6 +39,8 @@ const AuthProvider = ({ children }) => {
   }, [sessionId]);
 
   const authState = {
+    avatar,
+    setAvatar,
     sessionId,
     isLoggedIn,
     setSessionId,

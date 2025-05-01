@@ -52,26 +52,38 @@ $semi-dark-blue: #161d2f;
   font-weight: 500; // medium
 }
 
-#root {
-  margin: 32px;
-  height: calc(100vh - 32px - 32px);
-}
+// #root {
+//   margin: 32px;
+//   height: calc(100vh - 32px - 32px);
+// }
 
 body {
   @include body-m;
   background-color: $dark-blue;
   color: $white;
-  overflow-x: hidden;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.App {
-  height: 100%;
-}
+/* App.scss */
+.no-scrollbar {
 
-.Aside {
-  @media (min-width: 768px) {
-    /* md screens and up */
-    height: 95vh;
-    width: 96px;
+  /* Ocultar scrollbar en navegadores WebKit (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
   }
+
+  /* Ocultar scrollbar en Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
+
+// .Aside {
+//   @media (min-width: 768px) {
+//     /* md screens and up */
+//     height: 95vh;
+//     // width: 96px;
+//   }
+// }
