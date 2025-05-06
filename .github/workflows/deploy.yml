@@ -20,7 +20,7 @@ jobs:
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no root@168.231.82.135 << 'EOF'
+        ssh -o StrictHostKeyChecking=no -T root@168.231.82.135 << 'EOF'
           set -e  # Para que falle si algo falla
           
           # Cambiar a la carpeta donde está el repositorio
