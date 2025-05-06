@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # O la rama que prefieras para el deploy
+      - main
 
 jobs:
   deploy:
@@ -25,6 +25,10 @@ jobs:
           
           # Cambiar a la carpeta donde está el repositorio
           cd /opt/entertainment-web-app  
+
+          # Añadir el directorio como seguro para Git
+          echo "Configurando Git para confiar en el directorio..."
+          git config --global --add safe.directory /opt/entertainment-web-app
 
           # Actualizar el repositorio con los cambios más recientes
           echo "Actualizando código..."
