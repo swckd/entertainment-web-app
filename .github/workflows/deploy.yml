@@ -21,10 +21,31 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no root@168.231.82.135 << 'EOF'
-          cd /opt/entertainment-web-app
+          set -e  # Para que falle si algo falla
+          
+          # Cambiar a la carpeta donde está el repositorio
+          cd /opt/entertainment-web-app  
+
+          # Actualizar el repositorio con los cambios más recientes
+          echo "Actualizando código..."
           git pull origin main
+
+          # Instalar las dependencias necesarias
+          echo "Instalando dependencias..."
           npm install
+
+          # Construir la aplicación
+          echo "Construyendo la app..."
           npm run build
+
+          # Limpiar el directorio de destino
+          echo "Limpiando directorio destino..."
           rm -rf /var/www/wickeddev_es_usr/data/www/entertainment-wep-app.wickeddev.es/*
+
+          # Copiar los archivos del build al directorio de producción
+          echo "Copiando build..."
           cp -r build/* /var/www/wickeddev_es_usr/data/www/entertainment-wep-app.wickeddev.es/
+
+          # Confirmación del deploy
+          echo "¡Deploy completado!"
         EOF
